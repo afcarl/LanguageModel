@@ -1,6 +1,7 @@
 import numpy as np
 from nltk.corpus import stopwords
 from nltk.tokenize import sent_tokenize
+from pickle import dump
 from random import choice
 
 class NGramModel:
@@ -24,7 +25,6 @@ class NGramModel:
         self.ngrams = {}
         self.starts = []
 
-
     def addDocument(self, doc):
         sents = sent_tokenize(doc)
         for sent in sents:
@@ -45,7 +45,6 @@ class NGramModel:
                 else:
                     self.ngrams[first] = [last]
 
-
     def train(self, corpus=None):
         """Train the N-gram model on the documents
         """
@@ -62,7 +61,6 @@ class NGramModel:
             self.addDocument(doc)
 
         return self
-
 
     def generate(self, n_sents=3):
         """Generate random sentences.
@@ -85,8 +83,17 @@ class NGramModel:
                     curr = tuple(sent[-self.N:])
                 else:
                     break
-            sents.append(sent[:-1]) # don't include stop tag
+            sents.append( ' '.join(sent[:-1]) ) # don't include stop tag
         return sents
+
+    def save(self, filename):
+        """Save model to a pickle
+
+        Args:
+            filename: name of file to save
+        """
+        dump(self, open(filename, 'w'))
+
 
 
 class BigramModel(NGramModel):
