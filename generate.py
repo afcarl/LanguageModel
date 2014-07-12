@@ -1,3 +1,4 @@
+#!/usr/bin/python2
 from pickle import load
 from sys import argv, exit
 
@@ -9,4 +10,4 @@ n_sents = int(argv[1])
 model   = load(open(argv[2], 'r'))
 
 for s in model.generate(n_sents):
-    print s
+    print s[0].upper() + s[1:],
