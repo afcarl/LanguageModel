@@ -13,7 +13,8 @@ then
     VERBOSE=1
 fi
 
-DIR_ASOIAF='Texts/ASOIAF/'
+DIR_ASOIAF=Texts/ASOIAF/
+DIR_TEXTS=${DIR_ASOIAF}/RAW/
 
 # Short titles
 declare -A ABBRV=( [a_game_of_thrones]=AGOT
@@ -22,15 +23,15 @@ declare -A ABBRV=( [a_game_of_thrones]=AGOT
                    [a_feast_for_crows]=AFFC )
 
 # Run on all books
-for book in ${DIR_ASOIAF}/*.txt
+for book in ${DIR_TEXTS}/*.txt
 do
     OUTFILE=/dev/null
-    DIR_BOOK=${book%.txt}
-    BOOKNAME=${ABBRV[`basename ${DIR_BOOK}`]}
+    BOOKNAME=`basename ${book%.txt}`
+    SHORTNAME=${ABBRV[${BOOKNAME}]}
     CHAP_COUNT=0
     declare -A POV_COUNTS
 
-    mkdir -p ${DIR_BOOK}
+    mkdir -p ${DIR_ASOIAF}/${BOOKNAME}
 
     echo 'Extracting chapters from' ${BOOKNAME}
 
@@ -67,7 +68,7 @@ do
             fi
 
             # Change output destination
-            OUTFILE=${DIR_BOOK}/${BOOKNAME}
+            OUTFILE=${DIR_ASOIAF}/${BOOKNAME}/${SHORTNAME}
             OUTFILE+=_$(printf "%02d" ${CHAP_COUNT})_${pov}
             OUTFILE+=_$(printf "%02d" ${POV_COUNTS[${pov}]}).txt
 
